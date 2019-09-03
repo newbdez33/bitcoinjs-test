@@ -1,25 +1,21 @@
 const bitcoin = require('bitcoinjs-lib')
-const networks = require('bitcoinjs-lib').networks
+const base58 = require('bs58')
 
+let n = bitcoin.networks.testnet
 
-//let address = getRandomAddress();
-const jacky = bitcoin.ECPair.fromWIF('cTSEdFDCUVT9pRSZuwHQrf2RmnAjwUi5b14LdjMG2q7Dyb1L29Af', bitcoin.networks.regtest)
-const p2pk = bitcoin.payments.p2pk({ pubkey: jacky.publicKey, network: bitcoin.networks.regtest })
+//n4Ep9S7tzbUSBJaZfqzS1HC2rRf2F3Vksh
+const jacky = bitcoin.ECPair.fromWIF('cNi9TvdqNkhSupbvoCp59UG3h2Cm2MRYLPPA1E78Q3rMoACpQkLS', n)
 
-const txb = new bitcoin.TransactionBuilder(bitcoin.networks.regtest)
+// const p2pk = bitcoin.payments.p2pk({ pubkey: jacky.publicKey, network: n })
+// const p2pkh = bitcoin.payments.p2pkh({ pubkey: jacky.publicKey, network: n })
+// console.log(p2pkh.address);
 
-txb.addInput('63c7895673f1301409fea6597b8a56a67ad894458afb983dc7bc9848c715c2fe', 0, null, p2pk.output);
-txb.addOutput("mxfCEo2Jc5pPvvmfe4hFgtN2dks9mBKrwP", 1249997000);
+const txb = new bitcoin.TransactionBuilder(n)
+
+txb.addInput('4f3818f9aee58046f42ef4cd0a09810213b4e0b64c9fe679f08e0c81b433101e', 0, null);
+txb.addOutput("mkbNHmo4KVQWguAf8d3Vjh2ATqHPudwU8Y", 100000);
+txb.addOutput("n4Ep9S7tzbUSBJaZfqzS1HC2rRf2F3Vksh", 899850);   //here we return change to the old address, but it should be a new one.
 
 txb.sign(0, jacky)
 
 console.log("bitcoin-cli sendrawtransaction " + txb.build().toHex());
-
-function getRandomAddress() {
-    const keyPair = bitcoin.ECPair.makeRandom({ network: networks.regtest })
-    const { address } = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: networks.regtest })
-    const url = `https://btc.com/${address}`
-    console.log(url)
-    console.log("WIF: " + keyPair.toWIF())
-    return address;
-}
