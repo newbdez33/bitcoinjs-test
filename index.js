@@ -8,7 +8,8 @@ const jacky = bitcoin.ECPair.fromWIF('cNi9TvdqNkhSupbvoCp59UG3h2Cm2MRYLPPA1E78Q3
 
 // const p2pk = bitcoin.payments.p2pk({ pubkey: jacky.publicKey, network: n })
 // const p2pkh = bitcoin.payments.p2pkh({ pubkey: jacky.publicKey, network: n })
-// console.log(p2pkh.address);
+const p2sh = bitcoin.payments.p2sh({ pubkey: jacky.publicKey, network: n })
+console.log(p2sh.address);
 
 const txb = new bitcoin.TransactionBuilder(n)
 
